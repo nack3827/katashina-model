@@ -7,7 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
+<noscript><style>.reveal{opacity:1!important; transform:none!important;}</style></noscript>
 </head>
 <body>
 
@@ -26,7 +27,7 @@
 <!-- HERO / SECTION 01 -->
 <section class="section" id="s01" style="border-top:none; padding-top:0;">
   <div class="wrap hero">
-    <div class="breadcrumb reveal"><span class="here">MODEL</span><span class="sep">→</span>ISSUES<span class="sep">→</span>POLICIES<span class="sep">→</span>FIELD NOTES</div>
+    <div class="breadcrumb reveal"><span class="here">MODEL</span><span class="sep">→</span><a href="issues.html">ISSUES</a><span class="sep">→</span><a href="policies.html">POLICIES</a><span class="sep">→</span><a href="field-notes.html">FIELD NOTES</a></div>
     <div class="hero-kicker reveal" style="margin-top:14px;">KATASHINA MODEL ― 片品村を構造で捉え、地域の循環をつくる。</div>
     <h1 class="reveal d1">片品村の<br>現在地<span style="display:block; font-size:0.42em; margin-top:22px; color:var(--ink-soft); font-family:var(--sans); font-weight:400;">課題を<em>「構造」</em>で捉え、地域の循環をつくる</span></h1>
     <p class="lead reveal d2">人口減少は、原因ではなく結果かもしれない。片品村で起きていることを構造で捉え直し、行政・産業・人・文化・教育をつなぎ直す。</p>
@@ -418,19 +419,40 @@
 <script>
 /* ---------------- reveal on scroll ---------------- */
 const revealEls = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
-},{threshold:0.15});
-revealEls.forEach(el=>io.observe(el));
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  },{threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+} else {
+  revealEls.forEach(el=>el.classList.add('in'));
+}
 
 /* ---------------- stat card hypothesis toggle (section 01) ---------------- */
 document.querySelectorAll('.stat-card').forEach(card=>{
-  card.addEventListener('click', ()=> card.classList.toggle('open'));
+  card.setAttribute('role','button');
+  card.setAttribute('tabindex','0');
+  card.setAttribute('aria-expanded','false');
+  const toggle = ()=>{
+    card.classList.toggle('open');
+    card.setAttribute('aria-expanded', card.classList.contains('open') ? 'true' : 'false');
+  };
+  card.addEventListener('click', toggle);
+  card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); } });
 });
 
 /* ---------------- section 02 empathy column toggle ---------------- */
 document.querySelectorAll('.q-toggle').forEach(t=>{
-  t.addEventListener('click', ()=> t.parentElement.classList.toggle('open'));
+  t.setAttribute('role','button');
+  t.setAttribute('tabindex','0');
+  t.setAttribute('aria-expanded','false');
+  const toggle = ()=>{
+    const parent = t.parentElement;
+    parent.classList.toggle('open');
+    t.setAttribute('aria-expanded', parent.classList.contains('open') ? 'true' : 'false');
+  };
+  t.addEventListener('click', toggle);
+  t.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); } });
 });
 
 /* ---------------- dot nav ---------------- */
@@ -593,17 +615,28 @@ document.getElementById('cat-grid').innerHTML = categories.map(c=>`
     <div class="toggle"><span class="plus">＋</span> 詳細を見る</div>
   </div>`).join('');
 document.querySelectorAll('.issue-item').forEach(item=>{
-  item.addEventListener('click', (e)=>{
+  item.setAttribute('role','button');
+  item.setAttribute('tabindex','0');
+  item.setAttribute('aria-expanded','false');
+  const toggle = (e)=>{
     e.stopPropagation();
     item.classList.toggle('open');
-  });
+    item.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
+  };
+  item.addEventListener('click', toggle);
+  item.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(e); } });
 });
 document.querySelectorAll('.cat-card').forEach(card=>{
-  card.addEventListener('click', ()=>{
+  card.setAttribute('role','button');
+  card.setAttribute('tabindex','0');
+  card.setAttribute('aria-expanded','false');
+  const toggle = ()=>{
     const wasOpen = card.classList.contains('open');
-    document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('open'));
-    if(!wasOpen) card.classList.add('open');
-  });
+    document.querySelectorAll('.cat-card').forEach(c=>{ c.classList.remove('open'); c.setAttribute('aria-expanded','false'); });
+    if(!wasOpen){ card.classList.add('open'); card.setAttribute('aria-expanded','true'); }
+  };
+  card.addEventListener('click', toggle);
+  card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); } });
 });
 
 /* ---------------- akiya branch diagram ---------------- */
@@ -659,10 +692,13 @@ buildCycle('cycle-pos','cycle-pos-detail',[
 
 /* ---------------- roadmap toggle (section 09) ---------------- */
 document.querySelectorAll('.rm-card .rm-toggle').forEach(btn=>{
+  btn.setAttribute('aria-expanded','false');
   btn.addEventListener('click', ()=>{
     const card = btn.closest('.rm-card');
     card.classList.toggle('open');
-    btn.textContent = card.classList.contains('open') ? '－ 閉じる' : '＋ 5つのステップを見る';
+    const open = card.classList.contains('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.textContent = open ? '－ 閉じる' : '＋ 5つのステップを見る';
   });
 });
 
