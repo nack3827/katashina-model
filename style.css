@@ -148,7 +148,7 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 .cat-card .num{font-family:var(--mono); font-size:12px; color:var(--red); letter-spacing:.1em;}
 .cat-card h4{font-family:var(--serif); font-size:19px; margin:14px 0 16px;}
 .cat-card ul{list-style:none; max-height:0; overflow:hidden; transition:max-height .4s ease;}
-.cat-card.open ul{max-height:400px;}
+.cat-card.open ul{max-height:900px;}
 .cat-card ul li{font-size:14px; color:var(--ink-soft); padding:7px 0; border-top:1px dashed var(--line);}
 .cat-card .toggle{font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:14px; display:inline-flex; align-items:center; gap:6px;}
 .cat-card .toggle .plus{transition:transform .3s ease; display:inline-block;}
@@ -352,3 +352,13 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 .stat-detail{max-height:0; overflow:hidden; transition:max-height .5s ease;}
 .stat-card.open .stat-detail{max-height:300px;}
 .stat-detail p{font-size:13px; color:var(--ink-soft); line-height:1.85; padding-top:14px; margin-top:14px; border-top:1px dashed var(--line);}
+
+/* ---------- nested issue-item accordion inside cat-card (section04) ---------- */
+.cat-card ul li.issue-item{padding:0; border-top:1px dashed var(--line);}
+.cat-card .issue-head{font-size:14px; color:var(--ink-soft); padding:9px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer;}
+.cat-card .issue-head::after{content:'+'; font-family:var(--mono); font-size:11px; color:var(--muted); flex-shrink:0; margin-left:8px;}
+.cat-card .issue-item.open .issue-head::after{content:'−';}
+.cat-card .issue-item.open .issue-head{color:var(--ink);}
+.cat-card .issue-detail{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+.cat-card .issue-item.open .issue-detail{max-height:200px;}
+.cat-card .issue-detail p{font-size:12px; color:var(--muted); line-height:1.75; padding:0 0 12px;}
