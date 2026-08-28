@@ -77,6 +77,14 @@
     <div class="eyebrow reveal">最も大きな課題</div>
     <h2 class="big disp reveal d1">人口減少・高齢化</h2>
     <p class="ask reveal d2">でも、本当の問題は<br class="mobile-only">「人口が減っていること」<strong>だけ</strong>なのだろうか？</p>
+
+    <div class="q-toggle reveal d3"><span class="plus">＋</span> よくある捉え方を、少し変えてみる</div>
+    <div class="q-column">
+      <p>「人口減少」と聞くと、「もう仕方ない」「地方はどこも同じ」と、そこで思考が止まってしまうことがある。ニュースでも会議でも、同じような数字を見飽きるほど繰り返し聞かされてきたからかもしれない。</p>
+      <p>でも、「人口減少」というひとつの言葉でまとめてしまうと、村の中で実際に起きている無数の小さな出来事——誰かが村を出て行った理由、担い手が減って祭りの規模が縮んだこと、空き家がひとつ増えたこと——が、かえって見えなくなってしまう。</p>
+      <p>人口減少は、原因ではなく、いろいろな出来事が積み重なった「結果」なのかもしれない。だとしたら、人口の数字だけを追いかけても、根本のところは変わらない。</p>
+      <p>このページでは、人口減少という大きな言葉を一度分解して、片品村の中で実際に何が起きているのかを、ひとつずつ見ていきたい。</p>
+    </div>
   </div>
 </section>
 
@@ -411,6 +419,11 @@ revealEls.forEach(el=>io.observe(el));
 /* ---------------- stat card hypothesis toggle (section 01) ---------------- */
 document.querySelectorAll('.stat-card').forEach(card=>{
   card.addEventListener('click', ()=> card.classList.toggle('open'));
+});
+
+/* ---------------- section 02 empathy column toggle ---------------- */
+document.querySelectorAll('.q-toggle').forEach(t=>{
+  t.addEventListener('click', ()=> t.parentElement.classList.toggle('open'));
 });
 
 /* ---------------- dot nav ---------------- */
