@@ -4,7 +4,7 @@
   --bg-warm:#F1ECDF;
   --ink:#17140F;
   --ink-soft:#4A453B;
-  --muted:#847E6E;
+  --muted:#6E6857;
   --line:#DCD5C1;
   --red:#C13A2E;
   --red-deep:#8E2A21;
@@ -388,6 +388,8 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 .breadcrumb{font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.04em;}
 .breadcrumb .sep{margin:0 8px; color:var(--line);}
 .breadcrumb .here{color:var(--red);}
+.breadcrumb a{color:var(--muted); text-decoration:none; border-bottom:1px solid transparent;}
+.breadcrumb a:hover{color:var(--red); border-bottom-color:var(--red);}
 
 /* ---------- selection-logic 3-axis intro (issues.html) ---------- */
 .axis-intro{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin:36px 0 70px;}
@@ -437,3 +439,8 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 /* ---------- crosstab link to issue overview (policies.html) ---------- */
 .tt-link{color:var(--ink); text-decoration:none; border-bottom:1px solid var(--line);}
 .tt-link:hover{color:var(--red); border-bottom-color:var(--red);}
+
+/* ---------- keyboard focus visibility for interactive cards ---------- */
+.stat-card:focus-visible, .cat-card:focus-visible, .issue-item:focus-visible, .q-toggle:focus-visible{
+  outline:2px solid var(--red); outline-offset:2px;
+}
