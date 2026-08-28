@@ -363,15 +363,15 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 .cat-card .issue-item.open .issue-detail{max-height:200px;}
 .cat-card .issue-detail p{font-size:12px; color:var(--muted); line-height:1.75; padding:0 0 12px;}
 
-/* ---------- level overview strip (section05) ---------- */
-.level-overview{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:36px;}
-.lv-chip{display:inline-flex; align-items:center; gap:10px; background:var(--bg-warm); border:1px solid var(--line); padding:12px 18px; font-size:13.5px; text-decoration:none; color:var(--ink); transition:all .25s ease; scroll-margin-top:20px;}
-.lv-chip:hover{border-color:var(--red); color:var(--red);}
-.lv-chip .lv-num{font-family:var(--mono); font-size:11px; color:var(--red); border:1px solid var(--red); padding:2px 7px;}
-.lv-arrow{color:var(--muted); font-family:var(--mono);}
-@media (max-width:760px){
+/* ---------- level overview strip (section05) — flowchart style, matches .chain-step ---------- */
+.level-overview{display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:36px; padding:24px; background:var(--bg-warm); border:1px solid var(--line);}
+.lv-step{display:inline-flex; align-items:center; gap:9px; text-decoration:none; color:var(--ink); cursor:pointer; scroll-margin-top:20px;}
+.lv-step:hover{border-color:var(--red); color:var(--red);}
+.lv-step:hover .lv-num{border-color:var(--red); color:var(--red);}
+.lv-num{font-family:var(--mono); font-size:10.5px; color:var(--red); border:1px solid var(--red); padding:2px 6px; flex-shrink:0; transition:all .2s ease;}
+@media (max-width:900px){
   .level-overview{flex-direction:column; align-items:stretch;}
-  .lv-arrow{display:none;}
+  .level-overview .chain-arrow{display:none;}
 }
 .level{scroll-margin-top:20px;}
 
