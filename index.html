@@ -32,18 +32,34 @@
       <div class="stat-card">
         <div><span class="stat-num">3,928</span><span class="stat-unit">人</span></div>
         <div class="stat-label">総人口（2025年1月1日時点）</div>
+        <div class="stat-toggle"><span class="plus">＋</span> なぜこの数字か</div>
+        <div class="stat-detail">
+          <p>この数字単体では危機感が伝わりにくい。重要なのは減少の「ペース」と「年齢構成」で、右の3つの数字と合わせて読むことで、はじめて構造が見えてくる。すべての起点になる現在地の数字。</p>
+        </div>
       </div>
       <div class="stat-card">
         <div><span class="stat-num">42.9</span><span class="stat-unit">%</span></div>
         <div class="stat-label">高齢化率（65歳以上人口比率）</div>
+        <div class="stat-toggle"><span class="plus">＋</span> なぜこの数字か</div>
+        <div class="stat-detail">
+          <p>全国平均（約29%）を大きく上回る。担い手不足に直結する数字だが、高齢者を「負担」とだけ捉えるのではなく、暮らしに眠る知恵や職人技の「保有者」として見る視点も、片品モデルでは重視している（05 LEVEL04・LEVEL05と接続）。</p>
+        </div>
       </div>
       <div class="stat-card">
         <div><span class="stat-num">▲55.4</span><span class="stat-unit">%</span></div>
         <div class="stat-label">2050年までの人口減少推計（2020年比、約1,800人）</div>
+        <div class="stat-toggle"><span class="plus">＋</span> なぜこの数字か</div>
+        <div class="stat-detail">
+          <p>この数字は「何も対策をしなければこうなる」という基準線であり、確定した未来ではない。実際、片品村自身の総合計画でも、対策次第で2050年に2,600人以上を目指す複数シナリオが示されている。だからこそ「打ち手」が意味を持つ。</p>
+        </div>
       </div>
       <div class="stat-card">
         <div><span class="stat-num">6.5</span><span class="stat-unit">%</span></div>
         <div class="stat-label">20〜39歳女性人口比率（全国平均10.3%）</div>
+        <div class="stat-toggle"><span class="plus">＋</span> なぜこの数字か</div>
+        <div class="stat-detail">
+          <p>出産適齢期の女性人口比率が全国平均の3分の2以下しかない。出産人口そのものが増えなければ、長期的に人口は増えない構造的制約になっている。つまり、この年代の女性と接点を持てる観光・関係人口施策が必要ではないか、という仮説（HITOSアーユルヴェーダ・コミュニティ構想はこの仮説に基づく最初の一手）。</p>
+        </div>
       </div>
     </div>
     <p class="sources reveal d4">
@@ -383,6 +399,11 @@ const io = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
 },{threshold:0.15});
 revealEls.forEach(el=>io.observe(el));
+
+/* ---------------- stat card hypothesis toggle (section 01) ---------------- */
+document.querySelectorAll('.stat-card').forEach(card=>{
+  card.addEventListener('click', ()=> card.classList.toggle('open'));
+});
 
 /* ---------------- dot nav ---------------- */
 const sections = document.querySelectorAll('section[id]');
