@@ -703,13 +703,23 @@ buildCycle('cycle-pos','cycle-pos-detail',[
   {short:'地域価値↑', title:'地域価値が上がる', desc:'文化と経済が両輪で回り、村そのものの価値が上がる。'},
 ], {size:560, radius:200, nodeR:50, centerTitle:'KATASHINA', centerSub:'MODEL', arrowColor:'#6B5F4E', badgeColor:'#8A8370', startColor:'#E8735F', nodeFill:'#121009', nodeStroke:'#E8735F', subColor:'#8A8370'});
 
-/* ---------------- visitor counter (footer) ---------------- */
+/* ---------------- visitor counter (footer, unique per browser) ---------------- */
 (function(){
   const el = document.getElementById('visitor-count');
   if(!el) return;
-  fetch('https://countapi.mileshilliard.com/api/v1/hit/katashina-model-nack3827-site-visits')
+  const KEY = 'katashina-model-nack3827-site-visits';
+  const VISITED_FLAG = 'katashina_model_visited';
+  let alreadyVisited = false;
+  try { alreadyVisited = !!localStorage.getItem(VISITED_FLAG); } catch(e) {}
+  const endpoint = alreadyVisited
+    ? `https://countapi.mileshilliard.com/api/v1/get/${KEY}`
+    : `https://countapi.mileshilliard.com/api/v1/hit/${KEY}`;
+  fetch(endpoint)
     .then(r => r.json())
-    .then(data => { el.textContent = Number(data.value).toLocaleString('ja-JP'); })
+    .then(data => {
+      el.textContent = Number(data.value).toLocaleString('ja-JP');
+      if(!alreadyVisited){ try { localStorage.setItem(VISITED_FLAG, '1'); } catch(e) {} }
+    })
     .catch(() => { el.textContent = '—'; });
 })();
 document.querySelectorAll('.rm-card .rm-toggle').forEach(btn=>{
