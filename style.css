@@ -444,3 +444,32 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 .stat-card:focus-visible, .cat-card:focus-visible, .issue-item:focus-visible, .q-toggle:focus-visible{
   outline:2px solid var(--red); outline-offset:2px;
 }
+
+/* ========================================================
+   MOBILE OPTIMIZATION PASS
+   ======================================================== */
+
+/* ---------- nav bar: stack on narrow screens ---------- */
+@media (max-width:560px){
+  .site-nav{flex-direction:column; align-items:flex-start; gap:12px;}
+}
+
+/* ---------- diagrams: allow horizontal scroll instead of shrinking text below legible size ---------- */
+.diagram-scroll-hint{display:none; font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:14px; letter-spacing:.06em;}
+@media (max-width:640px){
+  .diagram-scroll-hint{display:block;}
+  .cycle-svg-box{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -20px; padding:0 20px;}
+  .cycle-svg-box svg{width:auto; max-width:none;}
+  #cycle-neg{min-width:440px;}
+  #cycle-pos{min-width:520px;}
+  .branch-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -20px; padding:0 20px 40px;}
+  .branch-svg{width:auto; max-width:none; min-width:760px;}
+}
+
+/* ---------- larger touch targets on mobile for accordion rows ---------- */
+@media (max-width:640px){
+  .cat-card .issue-head{padding:13px 0;}
+  .stat-toggle, .toggle{padding:6px 0;}
+  .q-toggle{padding:8px 0;}
+  .rm-toggle{padding:10px 14px; min-height:38px;}
+}
