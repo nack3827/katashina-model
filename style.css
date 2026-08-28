@@ -124,8 +124,10 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 .section.dark .cycle-node text{fill:var(--dark-ink);}
 .cycle-node.active circle{fill:var(--red);}
 .cycle-node.active text{fill:#fff;}
-.cycle-arrow path{stroke:var(--line); stroke-width:1.6; fill:none;}
+.cycle-arrow path{stroke:var(--line); stroke-width:1.8; fill:none; stroke-dasharray:3 7; animation:cycleflow 1.4s linear infinite;}
+@keyframes cycleflow{ to{ stroke-dashoffset:-20; } }
 .section.dark .cycle-arrow path{stroke:var(--dark-line);}
+@media (prefers-reduced-motion: reduce){ .cycle-arrow path{animation:none;} }
 .cycle-center{font-family:var(--serif); font-size:22px; fill:var(--ink);}
 .section.dark .cycle-center{fill:var(--dark-ink);}
 .cycle-detail{
