@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 <noscript><style>.reveal{opacity:1!important; transform:none!important;}</style></noscript>
 </head>
 <body>
@@ -101,7 +101,10 @@
       <p>それぞれの課題は独立していない。ひとつが起きると、次が起きる。ノードをクリックすると、その内容が開く。</p>
     </div>
     <div class="cycle-wrap reveal d1">
-      <div class="cycle-svg-box"><svg id="cycle-neg" viewBox="0 0 480 480"></svg></div>
+      <div class="cycle-svg-box">
+        <svg id="cycle-neg" viewBox="0 0 480 480"></svg>
+        <div class="diagram-scroll-hint">← → 図を横にスクロールできます</div>
+      </div>
       <div class="cycle-detail" id="cycle-neg-detail">
         <div class="idx">NODE 01</div>
         <h4>人口減少</h4>
@@ -240,6 +243,7 @@
     </div>
     <div class="branch-wrap reveal d1">
       <svg id="akiya-branch" class="branch-svg" viewBox="0 0 900 520"></svg>
+      <div class="diagram-scroll-hint">← → 図を横にスクロールできます</div>
     </div>
     <div class="reveal d2" style="margin-top:20px;">
       <div class="level-msg" style="margin-top:0;">空き家 × 片品人口モデル</div>
@@ -300,7 +304,10 @@
     </div>
 
     <div class="cycle-wrap reveal d3">
-      <div class="cycle-svg-box"><svg id="cycle-pos" viewBox="0 0 560 560"></svg></div>
+      <div class="cycle-svg-box">
+        <svg id="cycle-pos" viewBox="0 0 560 560"></svg>
+        <div class="diagram-scroll-hint">← → 図を横にスクロールできます</div>
+      </div>
       <div class="cycle-detail" id="cycle-pos-detail" style="border-left-color:#E8735F;">
         <div class="idx" style="color:#E8735F;">NODE 01</div>
         <h4 style="color:var(--dark-ink);">自然・文化・人</h4>
