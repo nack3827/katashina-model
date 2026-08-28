@@ -120,7 +120,7 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 .cycle-svg-box svg{width:100%; height:auto; overflow:visible;}
 .cycle-node{cursor:pointer;}
 .cycle-node circle{transition:all .25s ease;}
-.cycle-node text{font-size:13px; fill:var(--ink); pointer-events:none;}
+.cycle-node text{font-family:var(--serif); font-size:14px; fill:var(--ink); pointer-events:none;}
 .section.dark .cycle-node text{fill:var(--dark-ink);}
 .cycle-node.active circle{fill:var(--red);}
 .cycle-node.active text{fill:#fff;}
