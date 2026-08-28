@@ -260,7 +260,7 @@
     </div>
 
     <div class="cycle-wrap reveal d3">
-      <div class="cycle-svg-box"><svg id="cycle-pos" viewBox="0 0 520 520"></svg></div>
+      <div class="cycle-svg-box"><svg id="cycle-pos" viewBox="0 0 560 560"></svg></div>
       <div class="cycle-detail" id="cycle-pos-detail" style="border-left-color:#E8735F;">
         <div class="idx" style="color:#E8735F;">NODE 01</div>
         <h4 style="color:var(--dark-ink);">自然・文化・人</h4>
@@ -405,20 +405,31 @@ const navIO = new IntersectionObserver((entries)=>{
 sections.forEach(s=>navIO.observe(s));
 
 /* ---------------- generic circular cycle diagram ---------------- */
+function wrapCycleLabel(label, maxChars){
+  maxChars = maxChars || 5;
+  if(label.length <= maxChars) return [label];
+  const delim = label.indexOf('・');
+  if(delim > 0 && delim < label.length - 1){
+    return [label.slice(0, delim), label.slice(delim + 1)];
+  }
+  const mid = Math.ceil(label.length / 2);
+  return [label.slice(0, mid), label.slice(mid)];
+}
+
 function buildCycle(svgId, detailId, items, opts){
   opts = opts || {};
   const svg = document.getElementById(svgId);
   const size = opts.size || 480;
   const R = opts.radius || size*0.36;
   const cx = size/2, cy = size/2;
-  const nodeR = opts.nodeR || 30;
+  const nodeR = opts.nodeR || 34;
   const n = items.length;
   const nodes = items.map((it,i)=>{
     const angle = (-90 + (360/n)*i) * Math.PI/180;
-    return { x: cx + R*Math.cos(angle), y: cy + R*Math.sin(angle), ...it };
+    return { x: cx + R*Math.cos(angle), y: cy + R*Math.sin(angle), angle, ...it };
   });
   let svgHTML = '';
-  // arrows between consecutive nodes (curved along circle)
+  // arrows between consecutive nodes (curved along circle), drawn with a flowing dash to show direction
   for(let i=0;i<n;i++){
     const a = nodes[i], b = nodes[(i+1)%n];
     const midAngle = Math.atan2((a.y+b.y)/2-cy, (a.x+b.x)/2-cx);
@@ -426,13 +437,25 @@ function buildCycle(svgId, detailId, items, opts){
     const mx = cx + midR*Math.cos(midAngle), my = cy + midR*Math.sin(midAngle);
     svgHTML += `<g class="cycle-arrow"><path d="M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}" marker-end="url(#arrow-${svgId})"/></g>`;
   }
-  svgHTML = `<defs><marker id="arrow-${svgId}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${opts.arrowColor||'#DCD5C1'}"/></marker></defs>` + svgHTML;
+  svgHTML = `<defs><marker id="arrow-${svgId}" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="${opts.arrowColor||'#DCD5C1'}"/></marker></defs>` + svgHTML;
   svgHTML += `<text x="${cx}" y="${cy-6}" text-anchor="middle" class="cycle-center">${opts.centerTitle||''}</text>`;
   if(opts.centerSub){ svgHTML += `<text x="${cx}" y="${cy+18}" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="${opts.subColor||'#847E6E'}">${opts.centerSub}</text>`; }
   nodes.forEach((nd,i)=>{
+    // order badge, placed just outside the ring so the reading order is visible regardless of click state
+    const badgeR = R + nodeR + 15;
+    const bx = cx + badgeR*Math.cos(nd.angle), by = cy + badgeR*Math.sin(nd.angle);
+    svgHTML += `<text x="${bx}" y="${by}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono" font-size="10.5" fill="${i===0 ? (opts.arrowColor && opts.startColor || opts.startColor || '#C13A2E') : (opts.badgeColor||'#9a9484')}" font-weight="${i===0?'700':'400'}">${i===0 ? 'START' : String(i+1).padStart(2,'0')}</text>`;
+
+    const lines = wrapCycleLabel(nd.short, opts.wrapChars || 5);
+    let textHTML;
+    if(lines.length === 1){
+      textHTML = `<text text-anchor="middle" dy="0.35em">${lines[0]}</text>`;
+    } else {
+      textHTML = `<text text-anchor="middle"><tspan x="0" dy="-0.05em">${lines[0]}</tspan><tspan x="0" dy="1.15em">${lines[1]}</tspan></text>`;
+    }
     svgHTML += `<g class="cycle-node${i===0?' active':''}" data-idx="${i}" transform="translate(${nd.x},${nd.y})">
       <circle r="${nodeR}" fill="${opts.nodeFill||'#F7F4EC'}" stroke="${opts.nodeStroke||'#C13A2E'}" stroke-width="1.4"/>
-      <text text-anchor="middle" dy="0.35em">${nd.short}</text>
+      ${textHTML}
     </g>`;
   });
   svg.innerHTML = svgHTML;
@@ -460,7 +483,7 @@ buildCycle('cycle-neg','cycle-neg-detail',[
   {short:'稼ぐ力低下', title:'地域の稼ぐ力が低下', desc:'現場が疲弊し、新しい商品・サービスに投資する余力がなくなる。'},
   {short:'所得減', title:'仕事・所得が減る', desc:'産業の生産性が上がらず、賃金や事業機会が増えない。'},
   {short:'若者流出', title:'若者が流出', desc:'進学・就職のタイミングで、より稼げる都市部へ人が出ていく。'},
-], {centerTitle:'負の構造', arrowColor:'#DCD5C1', nodeFill:'#F7F4EC', nodeStroke:'#C13A2E'});
+], {centerTitle:'負の構造', arrowColor:'#B8AF98', badgeColor:'#9a9484', nodeFill:'#F7F4EC', nodeStroke:'#C13A2E'});
 
 const level4Items = [
   {t:'古民家', d:'昭和の暮らしが残る空間資源'},
@@ -546,7 +569,7 @@ buildCycle('cycle-pos','cycle-pos-detail',[
   {short:'人が残る', title:'人が残る', desc:'訪れた人・育った人が、村に残る選択をする。'},
   {short:'文化が継承', title:'文化が継承される', desc:'残った人によって、暮らしの知恵や職人技が次の世代に渡る。'},
   {short:'地域価値↑', title:'地域価値が上がる', desc:'文化と経済が両輪で回り、村そのものの価値が上がる。'},
-], {size:520, radius:200, nodeR:44, centerTitle:'KATASHINA', centerSub:'MODEL', arrowColor:'#3A342A', nodeFill:'#121009', nodeStroke:'#E8735F', subColor:'#8A8370'});
+], {size:560, radius:200, nodeR:46, centerTitle:'KATASHINA', centerSub:'MODEL', arrowColor:'#6B5F4E', badgeColor:'#8A8370', startColor:'#E8735F', nodeFill:'#121009', nodeStroke:'#E8735F', subColor:'#8A8370'});
 
 /* ---------------- roadmap toggle (section 09) ---------------- */
 document.querySelectorAll('.rm-card .rm-toggle').forEach(btn=>{
