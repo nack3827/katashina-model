@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=9">
 <noscript><style>.reveal{opacity:1!important; transform:none!important;}</style></noscript>
 </head>
 <body>
@@ -423,6 +423,12 @@
   </div>
 </section>
 
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="visitor-counter">訪問者数　<span id="visitor-count">--</span> 人</div>
+  </div>
+</footer>
+
 <script>
 /* ---------------- reveal on scroll ---------------- */
 const revealEls = document.querySelectorAll('.reveal');
@@ -697,7 +703,15 @@ buildCycle('cycle-pos','cycle-pos-detail',[
   {short:'地域価値↑', title:'地域価値が上がる', desc:'文化と経済が両輪で回り、村そのものの価値が上がる。'},
 ], {size:560, radius:200, nodeR:50, centerTitle:'KATASHINA', centerSub:'MODEL', arrowColor:'#6B5F4E', badgeColor:'#8A8370', startColor:'#E8735F', nodeFill:'#121009', nodeStroke:'#E8735F', subColor:'#8A8370'});
 
-/* ---------------- roadmap toggle (section 09) ---------------- */
+/* ---------------- visitor counter (footer) ---------------- */
+(function(){
+  const el = document.getElementById('visitor-count');
+  if(!el) return;
+  fetch('https://countapi.mileshilliard.com/api/v1/hit/katashina-model-nack3827-site-visits')
+    .then(r => r.json())
+    .then(data => { el.textContent = Number(data.value).toLocaleString('ja-JP'); })
+    .catch(() => { el.textContent = '—'; });
+})();
 document.querySelectorAll('.rm-card .rm-toggle').forEach(btn=>{
   btn.setAttribute('aria-expanded','false');
   btn.addEventListener('click', ()=>{
