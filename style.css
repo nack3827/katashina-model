@@ -342,3 +342,13 @@ h1,h2,h3,.disp{font-family:var(--serif); font-weight:700; letter-spacing:0.01em;
 .np-title{font-family:var(--serif); font-size:18px; color:var(--dark-ink); margin-bottom:16px;}
 .km-final{font-family:var(--serif); font-size:clamp(18px,2.4vw,26px); color:var(--dark-ink); line-height:1.9; margin-top:70px;}
 .km-final em{color:#E8735F; font-style:normal;}
+
+/* ---------- stat card accordion (section01) ---------- */
+.stat-card{cursor:pointer; transition:background .25s ease;}
+.stat-card:hover{background:var(--bg-warm);}
+.stat-toggle{font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:16px; display:inline-flex; align-items:center; gap:6px;}
+.stat-toggle .plus{transition:transform .3s ease; display:inline-block;}
+.stat-card.open .stat-toggle .plus{transform:rotate(45deg);}
+.stat-detail{max-height:0; overflow:hidden; transition:max-height .5s ease;}
+.stat-card.open .stat-detail{max-height:300px;}
+.stat-detail p{font-size:13px; color:var(--ink-soft); line-height:1.85; padding-top:14px; margin-top:14px; border-top:1px dashed var(--line);}
