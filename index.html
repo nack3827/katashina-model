@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -468,7 +468,7 @@ function buildCycle(svgId, detailId, items, opts){
   const size = opts.size || 480;
   const R = opts.radius || size*0.36;
   const cx = size/2, cy = size/2;
-  const nodeR = opts.nodeR || 34;
+  const nodeR = opts.nodeR || 38;
   const n = items.length;
   const nodes = items.map((it,i)=>{
     const angle = (-90 + (360/n)*i) * Math.PI/180;
@@ -492,12 +492,12 @@ function buildCycle(svgId, detailId, items, opts){
     const bx = cx + badgeR*Math.cos(nd.angle), by = cy + badgeR*Math.sin(nd.angle);
     svgHTML += `<text x="${bx}" y="${by}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono" font-size="10.5" fill="${i===0 ? (opts.arrowColor && opts.startColor || opts.startColor || '#C13A2E') : (opts.badgeColor||'#9a9484')}" font-weight="${i===0?'700':'400'}">${i===0 ? 'START' : String(i+1).padStart(2,'0')}</text>`;
 
-    const lines = wrapCycleLabel(nd.short, opts.wrapChars || 5);
+    const lines = wrapCycleLabel(nd.short, opts.wrapChars || 3);
     let textHTML;
     if(lines.length === 1){
       textHTML = `<text text-anchor="middle" dy="0.35em">${lines[0]}</text>`;
     } else {
-      textHTML = `<text text-anchor="middle"><tspan x="0" dy="-0.05em">${lines[0]}</tspan><tspan x="0" dy="1.15em">${lines[1]}</tspan></text>`;
+      textHTML = `<text text-anchor="middle"><tspan x="0" dy="-0.3em">${lines[0]}</tspan><tspan x="0" dy="1.3em">${lines[1]}</tspan></text>`;
     }
     svgHTML += `<g class="cycle-node${i===0?' active':''}" data-idx="${i}" transform="translate(${nd.x},${nd.y})">
       <circle r="${nodeR}" fill="${opts.nodeFill||'#F7F4EC'}" stroke="${opts.nodeStroke||'#C13A2E'}" stroke-width="1.4"/>
@@ -652,7 +652,7 @@ buildCycle('cycle-pos','cycle-pos-detail',[
   {short:'人が残る', title:'人が残る', desc:'訪れた人・育った人が、村に残る選択をする。'},
   {short:'文化が継承', title:'文化が継承される', desc:'残った人によって、暮らしの知恵や職人技が次の世代に渡る。'},
   {short:'地域価値↑', title:'地域価値が上がる', desc:'文化と経済が両輪で回り、村そのものの価値が上がる。'},
-], {size:560, radius:200, nodeR:46, centerTitle:'KATASHINA', centerSub:'MODEL', arrowColor:'#6B5F4E', badgeColor:'#8A8370', startColor:'#E8735F', nodeFill:'#121009', nodeStroke:'#E8735F', subColor:'#8A8370'});
+], {size:560, radius:200, nodeR:50, centerTitle:'KATASHINA', centerSub:'MODEL', arrowColor:'#6B5F4E', badgeColor:'#8A8370', startColor:'#E8735F', nodeFill:'#121009', nodeStroke:'#E8735F', subColor:'#8A8370'});
 
 /* ---------------- roadmap toggle (section 09) ---------------- */
 document.querySelectorAll('.rm-card .rm-toggle').forEach(btn=>{
