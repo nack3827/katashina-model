@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>イベント ― KATASHINA MODEL EVENTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=10">
+<noscript><style>.reveal{opacity:1!important; transform:none!important;}</style></noscript>
+</head>
+<body>
+
+<header class="site-nav">
+  <a class="brand" href="index.html">KATASHINA MODEL</a>
+  <div class="links">
+    <a class="nav-link" href="index.html">片品モデル</a>
+    <a class="nav-link" href="issues.html">課題を深掘り</a>
+    <a class="nav-link" href="policies.html">村の政策</a>
+    <a class="nav-link" href="field-notes.html">探求ノート</a>
+    <a class="nav-link current" href="events.html">イベント</a>
+  </div>
+</header>
+
+<section class="section" style="border-top:none;">
+  <div class="wrap fn-hero">
+    <div class="breadcrumb"><a href="index.html">MODEL</a><span class="sep">→</span><a href="issues.html">ISSUES</a><span class="sep">→</span><a href="policies.html">POLICIES</a><span class="sep">→</span><a href="field-notes.html">FIELD NOTES</a><span class="sep">→</span><span class="here">EVENTS</span></div>
+    <div class="eyebrow" style="margin-top:18px;">EVENTS</div>
+    <h1 class="disp">片品村のイベント</h1>
+    <p>片品村で行われるイベントを集約するカレンダー。現時点では確定しているものだけを掲載している。まだ数は少ないが、分かり次第ここに増えていく。</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+
+    <div class="cal-header">
+      <div class="cal-title" id="cal-title">2026年8月</div>
+      <div class="cal-nav">
+        <button id="cal-prev" type="button">← 前の月</button>
+        <button id="cal-today" class="cal-today" type="button">今月</button>
+        <button id="cal-next" type="button">次の月 →</button>
+      </div>
+    </div>
+
+    <div class="cal-grid" id="cal-grid"></div>
+    <div id="cal-empty-area"></div>
+
+    <div class="agenda-list">
+      <div class="ec-block-title" style="margin-top:0;">すべてのイベント</div>
+      <div id="agenda-list"></div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="visitor-counter">訪問者数　<span id="visitor-count">--</span> 人</div>
+  </div>
+</footer>
+
+<script>
+let events = [];
+let viewYear, viewMonth; // viewMonth: 0-11
+
+const DOW = ['日','月','火','水','木','金','土'];
+
+function pad(n){ return String(n).padStart(2,'0'); }
+
+function renderCalendar(){
+  const grid = document.getElementById('cal-grid');
+  const title = document.getElementById('cal-title');
+  const emptyArea = document.getElementById('cal-empty-area');
+  title.textContent = `${viewYear}年${viewMonth+1}月`;
+
+  const firstDay = new Date(viewYear, viewMonth, 1);
+  const startDow = firstDay.getDay();
+  const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+  const todayStr = new Date().toISOString().slice(0,10);
+
+  const monthEvents = events.filter(e => e.date.slice(0,7) === `${viewYear}-${pad(viewMonth+1)}`);
+  const eventsByDate = {};
+  monthEvents.forEach(e => { (eventsByDate[e.date] = eventsByDate[e.date] || []).push(e); });
+
+  let html = DOW.map(d => `<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<startDow;i++){ html += `<div class="cal-cell empty"></div>`; }
+  for(let d=1; d<=daysInMonth; d++){
+    const dateStr = `${viewYear}-${pad(viewMonth+1)}-${pad(d)}`;
+    const isToday = dateStr === todayStr;
+    const dayEvents = eventsByDate[dateStr];
+    const hasEvent = !!dayEvents;
+    html += `<div class="cal-cell${isToday?' is-today':''}${hasEvent?' has-event':''}" ${hasEvent ? `data-date="${dateStr}"`:''}>
+      <div class="cal-daynum">${d}</div>
+      ${hasEvent ? `<div class="cal-event-dot"></div><div class="cal-event-label">${dayEvents[0].title}</div>` : ''}
+    </div>`;
+  }
+  grid.innerHTML = html;
+
+  grid.querySelectorAll('.cal-cell.has-event').forEach(cell=>{
+    cell.addEventListener('click', ()=>{
+      const date = cell.dataset.date;
+      const el = document.querySelector(`.agenda-item[data-date="${date}"]`);
+      if(el){ el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.add('highlight'); setTimeout(()=>el.classList.remove('highlight'), 1500); }
+    });
+  });
+
+  if(monthEvents.length === 0){
+    const upcoming = events
+      .filter(e => e.date >= todayStr)
+      .sort((a,b)=> a.date.localeCompare(b.date))[0];
+    let msg = `<div class="cal-empty-msg">今月のイベントはありません。</div>`;
+    if(upcoming){
+      const d = new Date(upcoming.date);
+      msg += `<div class="cal-next-link">次のイベント：${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日　${upcoming.title}　<a href="#" onclick="jumpToEvent('${upcoming.date}');return false;">→ その月を見る</a></div>`;
+    }
+    emptyArea.innerHTML = msg;
+  } else {
+    emptyArea.innerHTML = '';
+  }
+}
+
+function jumpToEvent(dateStr){
+  const d = new Date(dateStr);
+  viewYear = d.getFullYear();
+  viewMonth = d.getMonth();
+  renderCalendar();
+  window.scrollTo({top: document.getElementById('cal-grid').offsetTop - 100, behavior:'smooth'});
+}
+
+function renderAgenda(){
+  const list = document.getElementById('agenda-list');
+  const todayStr = new Date().toISOString().slice(0,10);
+  const sorted = [...events].sort((a,b)=> a.date.localeCompare(b.date));
+  if(sorted.length === 0){
+    list.innerHTML = '<p style="color:var(--muted); font-size:14px;">まだ登録されているイベントはありません。</p>';
+    return;
+  }
+  list.innerHTML = sorted.map(e=>{
+    const d = new Date(e.date);
+    const dateLabel = `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
+    const isPast = e.date < todayStr;
+    const linkHtml = e.link ? `<p style="margin-top:8px;"><a href="${e.link}" style="color:var(--ink); border-bottom:1px solid var(--ink); text-decoration:none;">→ 詳しく見る</a></p>` : '';
+    return `<div class="agenda-item" data-date="${e.date}" style="${isPast?'opacity:.5;':''}">
+      <div class="agenda-date">${dateLabel}</div>
+      <div class="agenda-body">
+        <div class="agenda-cat">${e.category}${e.location ? ' ・ ' + e.location : ''}</div>
+        <h4>${e.title}</h4>
+        <p>${e.description}</p>
+        ${linkHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+fetch('events.json')
+  .then(r => r.json())
+  .then(data => {
+    events = data;
+    const now = new Date();
+    viewYear = now.getFullYear();
+    viewMonth = now.getMonth();
+    renderCalendar();
+    renderAgenda();
+  })
+  .catch(() => {
+    document.getElementById('agenda-list').innerHTML = '<p style="color:var(--muted);">イベント情報の読み込みに失敗しました。</p>';
+  });
+
+document.getElementById('cal-prev').addEventListener('click', ()=>{
+  viewMonth--; if(viewMonth < 0){ viewMonth = 11; viewYear--; }
+  renderCalendar();
+});
+document.getElementById('cal-next').addEventListener('click', ()=>{
+  viewMonth++; if(viewMonth > 11){ viewMonth = 0; viewYear++; }
+  renderCalendar();
+});
+document.getElementById('cal-today').addEventListener('click', ()=>{
+  const now = new Date();
+  viewYear = now.getFullYear();
+  viewMonth = now.getMonth();
+  renderCalendar();
+});
+
+/* ---------------- visitor counter (footer, unique per browser) ---------------- */
+(function(){
+  const el = document.getElementById('visitor-count');
+  if(!el) return;
+  const KEY = 'katashina-model-nack3827-site-visits';
+  const VISITED_FLAG = 'katashina_model_visited';
+  let alreadyVisited = false;
+  try { alreadyVisited = !!localStorage.getItem(VISITED_FLAG); } catch(e) {}
+  const endpoint = alreadyVisited
+    ? `https://countapi.mileshilliard.com/api/v1/get/${KEY}`
+    : `https://countapi.mileshilliard.com/api/v1/hit/${KEY}`;
+  fetch(endpoint)
+    .then(r => r.json())
+    .then(data => {
+      el.textContent = Number(data.value).toLocaleString('ja-JP');
+      if(!alreadyVisited){ try { localStorage.setItem(VISITED_FLAG, '1'); } catch(e) {} }
+    })
+    .catch(() => { el.textContent = '—'; });
+})();
+</script>
+</body>
+</html>
